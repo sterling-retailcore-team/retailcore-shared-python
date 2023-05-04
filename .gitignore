@@ -1,0 +1,11 @@
+
+venv/
+.history/
+__pycache__/
+.idea/
+logs/*
+.vscode/
+setup.cfg
+.DS_Store
+.pytest_cache
+/env
