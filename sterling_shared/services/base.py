@@ -23,7 +23,10 @@ class BaseRequest:
             res = requests.request(method=method, url=f"{self.base_url}/{path}", json=data, headers=headers)
         except Exception as err:
             raise Exception(f"Error occurred: {err}") from err
+        print(f"GOT result: {res}")
         if 200 <= res.status_code < 300:
+            print(f"AUTH SERVICE SUCCESSFUL: {res}")
             return res.json()
         else:
+            print(f"AUTH SERVICE FETCH NOT SUCCESSFUL: {res}")
             raise Exception(f"Error occurred: {res.json()}")
