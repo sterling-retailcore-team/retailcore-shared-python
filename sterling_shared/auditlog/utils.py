@@ -1,18 +1,37 @@
 import os
 import requests
+import settings
+
+from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from jwt import decode as jwt_decode
 
 def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns: list):
+
+    try:
+        authorization_header = request.headers.get('Authorization')
+        if not authorization_header:
+            return
+        token_key = str(authorization_header.split(' ')[1])
+        UntypedToken(token_key)
+    except (InvalidToken, TokenError) as e:
+        return
+    else:
+        decoded_data = jwt_decode(token_key, settings.SECRET_KEY, algorithms=["HS256"])
+        role_ids = decoded_data["role_ids"]
+        role_names = decoded_data["role_names"]
+
     logger_url = os.getenv("LOGGER_URL")
     log_data = {
         "action": action,
-        "roleid": request.user.role_ids,
+        "roleid": role_ids,
         "useractivitytype": action_type,
         "microservicename": microservice_name,
         "endpointname": dict(request.headers),
         "oldvaluesjson": oldvaluejson,
         "newvaluesjson": newvaluejson,
         "affectedcolumns": affected_columns,
-        "role": request.user.role_names,
+        "role": role_names,
         "firstname": request.user.firstname,
         "lastname": request.user.lastname,
         "username": request.user.username,
