@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class PERMISSIONS:
     # User permissions
     APPROVE_USER_REQUEST = "APPROVE_USER_REQUEST"
+    APPROVE_USERS = "APPROVE_USERS"
     CREATE_USER = "CREATE_USER"
     DISABLE_USER = "DISABLE_USER"
     ENABLE_USER = "ENABLE_USER"
