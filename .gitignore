@@ -8,4 +8,4 @@ logs/*
 setup.cfg
 .DS_Store
 .pytest_cache
-/env
+.env
