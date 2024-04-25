@@ -1,17 +1,15 @@
 import os
 import logging
 import requests
-import settings
+import jwt
 
 from jwt.exceptions import InvalidTokenError, DecodeError
-from jwt import decode as jwt_decode
 
 
 logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
 def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns: list):
-    
     try:
         authorization_header = request.headers.get('Authorization')
         if not authorization_header:
@@ -19,7 +17,7 @@ def create_log(request, action_type, action, microservice_name, module, module_i
             logger.error(message)
             return message
         token_key = str(authorization_header.split(' ')[1])
-        decoded_data = jwt_decode(token_key, settings.SECRET_KEY, algorithms=["HS256"])
+        decoded_data = jwt.decode(token_key, options={"verify_signature": False})
         role_ids = decoded_data["role_ids"]
         role_names = decoded_data["role_names"]
     except (InvalidTokenError, DecodeError) as e:
