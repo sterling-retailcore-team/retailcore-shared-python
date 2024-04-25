@@ -51,9 +51,12 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
     }
 
-    headers = {"Content-Type": "application/json"}
+    headers = {
+                "Content-Type": "application/json",
+                "Authorization": token_key
+                }
     try:
-        response = requests.post(logger_url, headers=headers, json=log_data)
+        response = requests.post(url=logger_url, headers=headers, json=log_data)
         response.raise_for_status()
     except Exception as e:
         logger.error(f"An error occurred while making API call: {e}")
