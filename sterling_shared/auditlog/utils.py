@@ -54,7 +54,7 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "module": module,
     "fullname": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
     "moduleID": module_id,
-    "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
+    "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None
     }
 
     headers = {

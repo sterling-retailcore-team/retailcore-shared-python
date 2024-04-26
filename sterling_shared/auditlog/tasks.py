@@ -14,5 +14,5 @@ def send_activity_log(activity_data):
         activity_data["module"],
         activity_data["module_id"],
         activity_data["oldvaluejson"],
-        activity_data["newvaluejson"],
+        activity_data["newvaluejson"]
     )
