@@ -2,14 +2,33 @@ import os
 import logging
 import requests
 import jwt
+import re
 
 from jwt.exceptions import InvalidTokenError, DecodeError
+
+
+def extract_browser_name(user_agent):
+    browser_patterns = {
+        'Chrome': 'Chrome\/[\d.]+',
+        'Firefox': 'Firefox\/[\d.]+',
+        'Safari': 'Version\/[\d.]+.*Safari',
+        'Edge': 'Edge\/[\d.]+',
+        'IE': 'Trident\/[\d.]+',
+        'Opera': 'Opera\/[\d.]+',
+    }
+    for browser_name, pattern in browser_patterns.items():
+        match = re.search(pattern, user_agent)
+        if match:
+            return browser_name
+    return 'Unknown'
 
 
 logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
-def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns: list):
+def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns):
+    user_agent = request.META.get('HTTP_USER_AGENT', ' ')
+    endpoint_name = request.path.split('/')[-1]
     try:
         authorization_header = request.headers.get('Authorization')
         if not authorization_header:
@@ -18,8 +37,9 @@ def create_log(request, action_type, action, microservice_name, module, module_i
             return message
         token_key = str(authorization_header.split(' ')[1])
         decoded_data = jwt.decode(token_key, options={"verify_signature": False})
-        role_ids = decoded_data["role_ids"]
-        role_names = decoded_data["role_names"]
+        role_ids = ", ".join(str(role_id) for role_id in decoded_data["role_ids"])
+        ", ".join(str(role_name) for role_name in decoded_data["role_names"])
+        role_names = ", ".join(decoded_data["role_names"])
     except (InvalidTokenError, DecodeError) as e:
         message = "Invalid token or decoding error"
         logger.warning(e)
@@ -27,28 +47,34 @@ def create_log(request, action_type, action, microservice_name, module, module_i
 
     log_data = {
     "action": action,
-    "useractivitytype": action_type,
-    "roleid": role_ids,
+    "sourceIP": request.META.get('REMOTE_ADDR', 'Unknown'),
+    "roleId": role_ids,
+    "userActivityType": action_type,
+    "microserviceName": microservice_name,
+    "payloadCreatedDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
+    "endpointName": endpoint_name,
+    "oldValuesJson": oldvaluejson,
+    "newValuesJson": newvaluejson,
+    "affectedColumns": affected_columns,
     "role": role_names,
-    "microservicename": microservice_name,
-    "endpointname": dict(request.headers),
-    "oldvaluesjson": oldvaluejson,
-    "newvaluesjson": newvaluejson,
-    "affectedcolumns": affected_columns,
-    "firstname": getattr(request.user, 'firstname', ''),
-    "lastname": getattr(request.user, 'lastname', ''),
-    "username": getattr(request.user, 'username', ''),
-    "userid": str(getattr(request.user, 'id', '')),
-    "ipaddress": request.META.get('REMOTE_ADDR', 'Unknown'),
-    "branchcode": getattr(request.user, 'branch_code', ''),
-    "branchname": getattr(request.user, 'branch', ''),
-    "actionstatus": getattr(request, 'status_code', None),
-    "lastlogin": str(getattr(request.user, 'last_login', '')) if getattr(request.user, 'last_login', '') else None,
-    "sessionid": "",
-    "fullname": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
+    "userName": getattr(request.user, 'username', ''),
+    "fullName": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
+    "userID": str(getattr(request.user, 'id', '')),
+    "createdDate": str(getattr(request.user, 'created_at', '')),
+    "ipAddress": request.META.get('REMOTE_ADDR', 'Unknown'),
+    "startDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
+    "endDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
+    "branchCode": getattr(request.user, 'branch_code', ''),
+    "location": request.META.get('REMOTE_ADDR', 'Unknown'),
+    "branchName": getattr(request.user, 'branch', ''),
+    "clientInfo": extract_browser_name(user_agent),
+    "actionStatus": getattr(request, 'status_code', None),
+    "lastLogin": str(getattr(request.user, 'last_login', '')) if getattr(request.user, 'last_login', '') else None,
+    "sessionID": microservice_name,
     "module": module,
-    "moduleid": module_id,
-    "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
+    "fullname": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
+    "moduleID": module_id,
+    "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None
     }
 
     headers = {
@@ -60,4 +86,3 @@ def create_log(request, action_type, action, microservice_name, module, module_i
         response.raise_for_status()
     except Exception as e:
         logger.error(f"An error occurred while making API call: {e}")
-        
