@@ -1,5 +1,5 @@
 from core.celery import APP
-from auditlog.utils import create_log
+from sterling_shared.auditlog.utils import create_log
 
 
 @APP.task()
