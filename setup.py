@@ -13,7 +13,7 @@ setuptools.setup(
     description="A utility package for sterling core",
     long_description=description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Prunedge-Dev-Team/retailcore-shared-python.git",
+    url="https://github.com/sterling-retailcore-team/retailcore-shared-python.git",
     license='MIT',
     python_requires='>=3.8',
     install_requires=[]
