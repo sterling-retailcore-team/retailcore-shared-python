@@ -31,7 +31,7 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "roleId": role_ids,
     "userActivityType": action_type,
     "microserviceName": microservice_name,
-    "payloadCreatedDate": "",
+    "payloadCreatedDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
     "endpointName": dict(request.headers),
     "oldValuesJson": oldvaluejson,
     "newValuesJson": newvaluejson,
