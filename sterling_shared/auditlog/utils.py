@@ -9,7 +9,7 @@ from jwt.exceptions import InvalidTokenError, DecodeError
 logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
-def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns: list):
+def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns):
     try:
         authorization_header = request.headers.get('Authorization')
         if not authorization_header:
@@ -66,3 +66,4 @@ def create_log(request, action_type, action, microservice_name, module, module_i
         response.raise_for_status()
     except Exception as e:
         logger.error(f"An error occurred while making API call: {e}")
+
