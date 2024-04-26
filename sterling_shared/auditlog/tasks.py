@@ -1,8 +1,9 @@
 from core.celery import APP
-from auditlog.utils import create_log
+from sterling_shared.auditlog.utils import create_log
 
 
 @APP.task()
+
 def send_activity_log(activity_data):
     create_log(
         activity_data["request"],
