@@ -45,7 +45,7 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "startDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
     "endDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
     "branchCode": getattr(request.user, 'branch_code', ''),
-    "location": "",
+    "location": request.META.get('REMOTE_ADDR', 'Unknown'),
     "branchName": getattr(request.user, 'branch', ''),
     "clientInfo": "browsername",
     "actionStatus": getattr(request, 'status_code', None),
