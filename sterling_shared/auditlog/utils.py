@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns):
     user_agent = request.META.get('HTTP_USER_AGENT', ' ')
-    endpoint_name = request.path.split('/')[-1]
+    endpoint_name = request.path
     try:
         authorization_header = request.headers.get('Authorization')
         if not authorization_header:
@@ -70,8 +70,8 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "clientInfo": extract_browser_name(user_agent),
     "actionStatus": getattr(request, 'status_code', None),
     "lastLogin": str(getattr(request.user, 'last_login', '')) if getattr(request.user, 'last_login', '') else None,
-    "sessionID": microservice_name,
-    "module": module,
+    "sessionID": microservice_name.title(),
+    "module": module.title(),
     "fullname": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
     "moduleID": module_id,
     "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None
