@@ -26,7 +26,7 @@ def extract_browser_name(user_agent):
 logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
-def create_log(request, action_type, action, microservice_name, module, module_id, oldvaluejson, newvaluejson, affected_columns):
+def create_log(request, action_type, action, microservice_name, module, module_id, old_value_json, new_value_json, affected_columns):
     user_agent = request.META.get('HTTP_USER_AGENT', ' ')
     endpoint_name = request.path
     try:
@@ -52,8 +52,8 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "microserviceName": microservice_name,
     "payloadCreatedDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
     "endpointName": endpoint_name,
-    "oldValuesJson": oldvaluejson,
-    "newValuesJson": newvaluejson,
+    "oldValuesJson": old_value_json,
+    "newValuesJson": new_value_json,
     "affectedColumns": affected_columns,
     "role": role_names,
     "userName": getattr(request.user, 'username', ''),
