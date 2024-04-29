@@ -38,8 +38,7 @@ def create_log(request, action_type, action, microservice_name, module, module_i
         token_key = str(authorization_header.split(' ')[1])
         decoded_data = jwt.decode(token_key, options={"verify_signature": False})
         role_ids = ", ".join(str(role_id) for role_id in decoded_data["role_ids"])
-        ", ".join(str(role_name) for role_name in decoded_data["role_names"])
-        role_names = ", ".join(decoded_data["role_names"])
+        role_names = ", ".join(str(role_name) for role_name in decoded_data["role_names"])
     except (InvalidTokenError, DecodeError) as e:
         message = "Invalid token or decoding error"
         logger.warning(e)
