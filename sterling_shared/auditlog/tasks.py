@@ -2,7 +2,7 @@ from core.celery import APP
 from sterling_shared.auditlog.utils import create_log
 
 
-@APP.task()
+@APP.task(serializer="pickle")
 def send_activity_log(activity_data):
     create_log(
         activity_data["request"],
