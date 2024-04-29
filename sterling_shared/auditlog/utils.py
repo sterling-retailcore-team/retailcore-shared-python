@@ -69,8 +69,8 @@ def create_log(request, action_type, action, microservice_name, module, module_i
     "clientInfo": extract_browser_name(user_agent),
     "actionStatus": getattr(request, 'status_code', None),
     "lastLogin": str(getattr(request.user, 'last_login', '')) if getattr(request.user, 'last_login', '') else None,
-    "sessionID": microservice_name.title(),
-    "module": module.title(),
+    "sessionID": microservice_name,
+    "module": module,
     "fullname": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
     "moduleID": module_id,
     "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None
