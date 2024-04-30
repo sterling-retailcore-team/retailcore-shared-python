@@ -1,10 +1,8 @@
 import os
 import logging
 import requests
-import jwt
 import re
 
-from jwt.exceptions import InvalidTokenError, DecodeError
 
 
 def extract_browser_name(user_agent):
@@ -26,60 +24,45 @@ def extract_browser_name(user_agent):
 logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
-def create_log(request, action_type, action, microservice_name, module, module_id, old_value_json, new_value_json, affected_columns):
-    user_agent = request.META.get('HTTP_USER_AGENT', ' ')
-    endpoint_name = request.path
-    try:
-        authorization_header = request.headers.get('Authorization')
-        if not authorization_header:
-            message = "Authorization header is missing"
-            logger.error(message)
-            return message
-        token_key = str(authorization_header.split(' ')[1])
-        decoded_data = jwt.decode(token_key, options={"verify_signature": False})
-        role_ids = ", ".join(str(role_id) for role_id in decoded_data["role_ids"])
-        role_names = ", ".join(str(role_name) for role_name in decoded_data["role_names"])
-    except (InvalidTokenError, DecodeError) as e:
-        message = "Invalid token or decoding error"
-        logger.warning(e)
-        return message
-
+def create_log(endpoint_name, token_key, meta, user_request, action_type, action, microservice_name, module, module_id, old_value_json, new_value_json, affected_columns):
+    role_ids = ", ".join(str(role_id) for role_id in token_key.get("role_ids", ""))
+    role_names = ", ".join(str(role_name) for role_name in token_key.get("role_names", ""))
     log_data = {
     "action": action,
-    "sourceIP": request.META.get('REMOTE_ADDR', 'Unknown'),
+    "sourceIP": meta.get('source_ip', 'Unknown'),
     "roleId": role_ids,
     "userActivityType": action_type,
     "microserviceName": microservice_name,
-    "payloadCreatedDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
+    "payloadCreatedDate": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None,
     "endpointName": endpoint_name,
     "oldValuesJson": old_value_json,
     "newValuesJson": new_value_json,
     "affectedColumns": affected_columns,
     "role": role_names,
-    "userName": getattr(request.user, 'username', ''),
-    "fullName": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
-    "userID": str(getattr(request.user, 'id', '')),
-    "createdDate": str(getattr(request.user, 'created_at', '')),
-    "ipAddress": request.META.get('REMOTE_ADDR', 'Unknown'),
-    "startDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
-    "endDate": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None,
-    "branchCode": getattr(request.user, 'branch_code', ''),
-    "location": request.META.get('REMOTE_ADDR', 'Unknown'),
-    "branchName": getattr(request.user, 'branch', ''),
-    "clientInfo": extract_browser_name(user_agent),
-    "actionStatus": getattr(request, 'status_code', None),
-    "lastLogin": str(getattr(request.user, 'last_login', '')) if getattr(request.user, 'last_login', '') else None,
+    "userName": getattr(user_request, 'username', ''),
+    "fullName": f"{getattr(user_request, 'firstname', '')} {getattr(user_request, 'lastname', '')}",
+    "userID": str(getattr(user_request, 'id', '')),
+    "createdDate": str(getattr(user_request, 'created_at', '')),
+    "ipAddress": meta.get('ip_address', 'Unknown'),
+    "startDate": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None,
+    "endDate": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None,
+    "branchCode": getattr(user_request, 'branch_code', ''),
+    "location": meta.get('ip_address', 'Unknown'),
+    "branchName": getattr(user_request, 'branch', ''),
+    "clientInfo": extract_browser_name(meta.get('user_agent', '')),
+    "actionStatus": extract_browser_name(meta.get('user_agent', '')),
+    "lastLogin": str(getattr(user_request, 'last_login', '')) if getattr(user_request, 'last_login', '') else None,
     "sessionID": microservice_name,
     "module": module,
-    "fullname": f"{getattr(request.user, 'firstname', '')} {getattr(request.user, 'lastname', '')}",
+    "fullname": f"{getattr(user_request, 'firstname', '')} {getattr(user_request, 'lastname', '')}",
     "moduleID": module_id,
-    "timestamp": str(getattr(request.user, 'created_at', '')) if getattr(request.user, 'created_at', '') else None
+    "timestamp": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None
     }
 
     headers = {
-                "Content-Type": "application/json",
-                "Authorization": token_key
-                }
+        "Content-Type": "application/json",
+        "Authorization": token_key
+    }
     try:
         response = requests.post(url=logger_url, headers=headers, json=log_data)
         response.raise_for_status()
