@@ -1,9 +1,9 @@
 import os
 import logging
-import requests
+import requests 
 import re
 import jwt
-
+import datetime
 
 
 def extract_browser_name(user_agent):
@@ -35,7 +35,7 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
     "roleId": role_ids,
     "userActivityType": action_type,
     "microserviceName": microservice_name,
-    "payloadCreatedDate": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None,
+    "payloadCreatedDate": user_request.created_at.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.created_at, datetime.datetime) else "",
     "endpointName": endpoint_name,
     "oldValuesJson": old_value_json,
     "newValuesJson": new_value_json,
@@ -44,23 +44,22 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
     "userName": getattr(user_request, 'username', ''),
     "fullName": f"{getattr(user_request, 'firstname', '')} {getattr(user_request, 'lastname', '')}",
     "userID": str(getattr(user_request, 'id', '')),
-    "createdDate": str(getattr(user_request, 'created_at', '')),
+    "createdDate": user_request.created_at.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.created_at, datetime.datetime) else "",
     "ipAddress": meta.get('ip_address', 'Unknown'),
-    "startDate": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None,
-    "endDate": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None,
+    "startDate": user_request.created_at.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.created_at, datetime.datetime) else "",
+    "endDate": user_request.created_at.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.created_at, datetime.datetime) else "",
     "branchCode": getattr(user_request, 'branch_code', ''),
     "location": meta.get('ip_address', 'Unknown'),
     "branchName": getattr(user_request, 'branch', ''),
     "clientInfo": extract_browser_name(meta.get('user_agent', '')),
     "actionStatus": extract_browser_name(meta.get('user_agent', '')),
-    "lastLogin": str(getattr(user_request, 'last_login', '')) if getattr(user_request, 'last_login', '') else None,
+    "lastLogin": user_request.last_login.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.last_login, datetime.datetime) else "",
     "sessionID": microservice_name,
     "module": module,
     "fullname": f"{getattr(user_request, 'firstname', '')} {getattr(user_request, 'lastname', '')}",
     "moduleID": module_id,
-    "timestamp": str(getattr(user_request, 'created_at', '')) if getattr(user_request, 'created_at', '') else None
+    "timestamp": user_request.created_at.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.created_at, datetime.datetime) else "",
     }
-
     headers = {
         "Content-Type": "application/json",
         "Authorization": token_key
