@@ -2,6 +2,7 @@ import os
 import logging
 import requests
 import re
+import jwt
 
 
 
@@ -25,8 +26,9 @@ logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
 def create_log(endpoint_name, token_key, meta, user_request, action_type, action, microservice_name, module, module_id, old_value_json, new_value_json, affected_columns):
-    role_ids = ", ".join(str(role_id) for role_id in token_key.get("role_ids", ""))
-    role_names = ", ".join(str(role_name) for role_name in token_key.get("role_names", ""))
+    decoded_token = jwt.decode(token_key, options={"verify_signature": False})
+    role_ids = ", ".join(str(role_id) for role_id in decoded_token.get("role_ids", ""))
+    role_names = ", ".join(str(role_name) for role_name in decoded_token.get("role_names", ""))
     log_data = {
     "action": action,
     "sourceIP": meta.get('source_ip', 'Unknown'),
