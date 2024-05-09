@@ -30,7 +30,7 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
     role_ids = ", ".join(str(role_id) for role_id in decoded_token.get("role_ids", ""))
     role_names = ", ".join(str(role_name) for role_name in decoded_token.get("role_names", ""))
     fullname = f"{user_request.firstname} {user_request.lastname}"
-    
+   
     log_data = {
     "action": action,
     "sourceIP": meta.get('source_ip', 'Unknown'),
@@ -59,7 +59,47 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
     "sessionID": microservice_name,
     "module": module,
     "moduleID": module_id,
-    "timestamp": user_request.created_at.strftime("%Y-%m-%d %H:%M:%S") if isinstance(user_request.created_at, datetime.datetime) else "",
+    "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "productId": "",
+    "productType": "",
+    "productName": "",
+    "reasonForFailure": "",
+    "otherInformation": "",
+    "authorizationDetails": "",
+    "ledgerId": "",
+    "ledgerName": "",
+    "ledgerType": "",
+    "ledgerClass": "",
+    "customerId": "",
+    "customerType": "",
+    "customerName": "",
+    "journalEntryInformation": "",
+    "transactionValue": "",
+    "exchangeRate": "",
+    "debitAccounts": "",
+    "creditAccounts": "",
+    "chargeCode": "",
+    "chargeName": "",
+    "taxCode": "",
+    "taxName": "",
+    "recordId": "",
+    "recordName": "",
+    "transactionEntryInformation": "",
+    "customerMandateView": "",
+    "modifiedParameter": "",
+    "periodCode": "",
+    "currencyCode": "",
+    "auditModuleAccessed": "",
+    "investmentEntryInformation": "",
+    "investmentProduct": "",
+    "investmentAmount": "",
+    "debitAccountLedger": "",
+    "creditAccountLedger": "",
+    "loanEntryInformation": "",
+    "loanProduct": "",
+    "loanAmount": "",
+    "eocRunInformation": "",
+    "eocRunLog": ""
     }
     headers = {
         "Content-Type": "application/json",
