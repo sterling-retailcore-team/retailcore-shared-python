@@ -12,7 +12,6 @@ def send_activity_log(activity_data):
         activity_data["action"],
         activity_data["microservice_name"],
         activity_data["module"],
-        activity_data["module_id"],
         activity_data["old_value_json"],
         activity_data["new_value_json"],
         activity_data["affected_columns"],
