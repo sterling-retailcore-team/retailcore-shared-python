@@ -15,4 +15,6 @@ def send_activity_log(activity_data):
         activity_data["old_value_json"],
         activity_data["new_value_json"],
         activity_data["affected_columns"],
+        activity_data["session_id"],
+
         )
