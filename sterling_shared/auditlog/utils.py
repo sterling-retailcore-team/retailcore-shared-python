@@ -22,24 +22,25 @@ def extract_browser_name(user_agent):
     return 'Unknown'
 
 def get_module_id(module):
-    if module == "User and Role Management":
-        return "user-role"
-    elif module == "Currency":
-        return "currency-config"
-    elif module.title() == "Fiscal Period":
-        return "fiscal-period"
-
+    module_map = {
+        "User And Role Management": "user-role",
+        "Currency": "currency-config",
+        "Fiscal Period": "fiscal-period",
+        "Segregation Of Duties": "seg-of-duties",
+        "Security Configuration": "security-config"
+    }
+    return module_map[module]
+    
 logger_url = os.getenv("LOGGER_URL")
 logger = logging.getLogger(__name__)
 
-def create_log(endpoint_name, token_key, meta, user_request, action_type, action, microservice_name, module, old_value_json, new_value_json, affected_columns):
+def create_log(endpoint_name, token_key, meta, user_request, action_type, action, microservice_name, module, old_value_json, new_value_json, affected_columns, session_id):
     decoded_token = jwt.decode(token_key, options={"verify_signature": False})
     role_ids = ", ".join(str(role_id) for role_id in decoded_token.get("role_ids", ""))
     role_names = ", ".join(str(role_name) for role_name in decoded_token.get("role_names", ""))
     fullname = f"{user_request.firstname} {user_request.lastname}"
-   
     log_data = {
-    "auditID": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "auditID": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),   
     "action": action,
     "sourceIP": meta.get('source_ip', 'Unknown'),
     "roleId": role_ids,
@@ -64,7 +65,7 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
     "clientInfo": extract_browser_name(meta.get('user_agent', '')),
     "actionStatus": extract_browser_name(meta.get('user_agent', '')),
     "lastLogin": datetime.datetime.strptime(user_request.last_login, "%Y-%m-%dT%H:%M:%S.%f%z").strftime("%Y-%m-%d %H:%M:%S.%f"),
-    "sessionID": microservice_name,
+    "sessionID": session_id,
     "module": module,
     "moduleID": get_module_id(module),
     "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
