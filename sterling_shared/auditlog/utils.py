@@ -23,8 +23,8 @@ def extract_browser_name(user_agent):
 
 def get_module_id(module):
     module_map = {
-        "User And Role Management": "user-role",
-        "Currency": "currency-config",
+        "User And Role Management": "user-role-mgt",
+        "Currency": "currency-mgt",
         "Fiscal Period": "fiscal-period",
         "Segregation Of Duties": "seg-of-duties",
         "Security Configuration": "security-config"
