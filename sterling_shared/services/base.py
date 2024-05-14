@@ -20,7 +20,7 @@ class BaseRequest:
                    'Content-Type': 'application/json'}
         try:
 
-            res = requests.request(method=method, url=f"{self.base_url}/{path}", json=data, headers=headers)
+            res = requests.request(method=method, url=f"{self.base_url}/{path}", json=data, headers=headers, verify=False)
         except Exception as err:
             raise Exception(f"Error occurred: {err}") from err
         if 200 <= res.status_code < 300:
