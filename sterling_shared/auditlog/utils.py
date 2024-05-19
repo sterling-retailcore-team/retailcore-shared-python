@@ -115,7 +115,7 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
         "Authorization": token_key
     }
     try:
-        response = requests.post(url=logger_url, headers=headers, json=log_data)
+        response = requests.post(url=logger_url, headers=headers, json=log_data, verify=False)
         response.raise_for_status()
     except Exception as e:
         logger.error(f"An error occurred while making API call: {e}")
