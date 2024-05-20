@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: sterling-utils
+Version: 0.1.2
+Summary: A utility package for sterling core
+Home-page: https://github.com/sterling-retailcore-team/retailcore-shared-python.git
+Author: Folayemi Bello
+Author-email: fola@bepeerless.co
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# Sterling Shared Python Utilities

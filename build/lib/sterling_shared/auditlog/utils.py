@@ -13,16 +13,12 @@ from django.db.models import Model
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, o):
-        if isinstance(o, datetime.datetime):
-            return str(o)
         if isinstance(o, decimal.Decimal):
             return str(o)
         if isinstance(o, UUID):
             return str(o)
         if isinstance(o, Model) and hasattr(o, 'to_dict'):
             return o.to_dict()
-        if hasattr(o, 'name'):
-            return str(o.name)
         if hasattr(o, 'id'):
             return str(o.id)
         return super().default(o)
@@ -157,7 +153,6 @@ def push_audit_log(data: AuditLogData):
         "Authorization": f"Bearer {token}"
     }
     try:
-        print("sterling_shared.push_audit_log", data.to_dict())
         response = requests.post(
             url=logger_url,
             headers=headers,
