@@ -126,12 +126,18 @@ class AuditLogMiddleware(MiddlewareMixin):
                 if not request.audit_data.userActivityType:
                     request.audit_data.userActivityType = \
                         self.infer_activity_type(request.method, request.path)
+                view_name = request.path
+                try:
+                    view_name = request.resolver_match.view_name
+                except:
+                    print("resolver_match is None for", request.path)
+                    pass
                 request.audit_data.microserviceName = \
                     request.audit_data.microserviceName or \
-                    request.resolver_match.view_name.split('.')[-1].replace(
+                    view_name.split('.')[-1].replace(
                         "View", ""
                     )
-                request.audit_data.endpointName = request.resolver_match.view_name
+                request.audit_data.endpointName = view_name
                 service_name = request.audit_data.microserviceName.split(":")[-1]
                 request.audit_data.action = f"{request.audit_data.userActivityType} on {service_name}"
                 is_success = response.status_code in range(200, 299)
@@ -157,8 +163,25 @@ class AuditLogMiddleware(MiddlewareMixin):
                             "role_names", ""
                         )
                     )
-                    request.audit_data.roleId = role_ids
-                    request.audit_data.roleName = role_names
+                    request.audit_data.roleId = role_ids or "<admin>"
+                    request.audit_data.roleName = role_names or "<admin>"
+                    if hasattr(user, 'branch_name'):
+                        request.audit_data.branchName = str(
+                            user.branch_name
+                        )
+                    else:
+                        request.audit_data.branchName = user.branch or \
+                                                        user.branch_code \
+                                                        or "<admin>"
+
+                    if hasattr(user, 'branch_code'):
+                        request.audit_data.branchCode = str(
+                            user.branch_code
+                        )
+                    else:
+                        request.audit_data.branchCode = user.branch or \
+                                                        user.branch_code \
+                                                        or "<admin>"
 
                 request.audit_data.endDate = str(datetime.datetime.now())
                 self.get_log_pusher()(request.audit_data)
