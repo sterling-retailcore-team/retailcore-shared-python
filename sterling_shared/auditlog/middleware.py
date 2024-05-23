@@ -164,7 +164,7 @@ class AuditLogMiddleware(MiddlewareMixin):
                         )
                     )
                     request.audit_data.roleId = role_ids or "<admin>"
-                    request.audit_data.roleName = role_names or "<admin>"
+                    request.audit_data.role = role_names or "<admin>"
                     if hasattr(user, 'branch_name'):
                         request.audit_data.branchName = str(
                             user.branch_name
