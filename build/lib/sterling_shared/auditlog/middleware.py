@@ -9,22 +9,6 @@ import jwt
 from django.utils.deprecation import MiddlewareMixin
 from .auditlog_data import AuditLogData
 
-path_to_exempt = [
-    "/api/doc/",
-    "/api/schema/",
-    "/api/v1/doc/",
-    "/api/v1/configs/current/",
-    "/api/v1/auth/login/",
-    "/api/v1/auth/token/refresh/",
-    "/api/v1/auth/token/verify/",
-    "/api/v1/auth/decode/",
-    "/api/v1/auth/2FA/",
-    "/api/v1/users/profile/",
-    "/api/v1/auth/ad/login/",
-    "/api/v1/auth/ad/redirect-url/",
-]
-
-
 class AuditLogMiddleware(MiddlewareMixin):
 
     def get_log_pusher(self):
@@ -55,6 +39,23 @@ class AuditLogMiddleware(MiddlewareMixin):
                 return browser_name
         return '<UNKNOWN>'
 
+    def get_exempt_paths(self):
+        paths = [
+            "/api/doc/",
+            "/api/schema/",
+            "/api/v1/doc/",
+            "/api/v1/configs/current/",
+            "/api/v1/auth/login/",
+            "/api/v1/auth/token/refresh/",
+            "/api/v1/auth/token/verify/",
+            "/api/v1/auth/decode/",
+            "/api/v1/auth/2FA/",
+            "/api/v1/users/profile/",
+            "/api/v1/auth/ad/login/",
+            "/api/v1/auth/ad/redirect-url/",
+        ]
+        return paths if paths else []
+    
     def get_client_ip(self, request):
         """
         get client ip address
@@ -71,8 +72,9 @@ class AuditLogMiddleware(MiddlewareMixin):
             return "<UNKNOWN>"
 
     def process_request(self, request):
+        exempt_paths = self.get_exempt_paths()
         if (
-                request.path not in path_to_exempt
+                request.path not in exempt_paths
                 and not request.path.startswith("/admin/")
                 and "__debug__" not in request.path
         ) and request.headers.get("Authorization"):
@@ -117,8 +119,9 @@ class AuditLogMiddleware(MiddlewareMixin):
         return activity_type
 
     def process_response(self, request, response):
+        exempt_paths = self.get_exempt_paths()
         if (
-                request.path not in path_to_exempt
+                request.path not in exempt_paths
                 and not request.path.startswith("/admin/")
                 and "__debug__" not in request.path
         ) and request.headers.get("Authorization"):
