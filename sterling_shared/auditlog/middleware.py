@@ -8,8 +8,9 @@ import jwt
 
 from django.utils.deprecation import MiddlewareMixin
 from .auditlog_data import AuditLogData
-def get_exempt_paths(self):
-        paths = [
+
+class AuditLogMiddleware(MiddlewareMixin):
+    PATH_TO_EXEMPT = [
             "/api/doc/",
             "/api/schema/",
             "/api/v1/doc/",
@@ -23,11 +24,6 @@ def get_exempt_paths(self):
             "/api/v1/auth/ad/login/",
             "/api/v1/auth/ad/redirect-url/",
         ]
-        return paths if paths else []
-    
-
-
-class AuditLogMiddleware(MiddlewareMixin):
 
     def get_log_pusher(self):
         """
@@ -60,6 +56,10 @@ class AuditLogMiddleware(MiddlewareMixin):
                 return browser_name
         return '<UNKNOWN>'
 
+    @classmethod
+    def get_exempt_paths(cls):
+        return cls.PATH_TO_EXEMPT or []
+        
     def get_client_ip(self, request):
         """
         get client ip address
@@ -76,7 +76,7 @@ class AuditLogMiddleware(MiddlewareMixin):
             return "<UNKNOWN>"
 
     def process_request(self, request):
-        exempt_paths = self.get_exempt_paths()
+        exempt_paths = AuditLogMiddleware.get_exempt_paths()
         if (
                 request.path not in exempt_paths
                 and not request.path.startswith("/admin/")
@@ -123,7 +123,7 @@ class AuditLogMiddleware(MiddlewareMixin):
         return activity_type
 
     def process_response(self, request, response):
-        exempt_paths = self.get_exempt_paths()
+        exempt_paths = AuditLogMiddleware.get_exempt_paths()
         if (
                 request.path not in exempt_paths
                 and not request.path.startswith("/admin/")
