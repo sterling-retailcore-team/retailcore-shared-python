@@ -21,12 +21,12 @@ class CustomJsonEncoder(json.JSONEncoder):
             return str(o)
         if isinstance(o, UUID):
             return str(o)
-        if isinstance(o, Model) and hasattr(o, 'to_dict'):
-            return o.to_dict()
         if hasattr(o, 'name'):
             return str(o.name)
         if hasattr(o, 'id'):
             return str(o.id)
+        if isinstance(o, Model) and hasattr(o, 'to_dict'):
+            return o.to_dict()
         return super().default(o)
 
 
