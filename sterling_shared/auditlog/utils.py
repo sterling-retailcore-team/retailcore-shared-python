@@ -15,6 +15,8 @@ class CustomJsonEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.datetime):
             return str(o)
+        if isinstance(o, datetime.date):
+            return str(o)
         if isinstance(o, decimal.Decimal):
             return str(o)
         if isinstance(o, UUID):
