@@ -174,8 +174,10 @@ def push_audit_log(data: AuditLogData):
             response.text
         )
         response.raise_for_status()
+        return response.text
     except Exception as e:
         print(
             "sterling_shared.push_audit_log",
             f"An error occurred while making API call: {e}"
         )
+        return f"An error occurred while making API call: {e}"
