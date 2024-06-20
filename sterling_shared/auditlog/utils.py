@@ -173,7 +173,7 @@ def push_audit_log(data: AuditLogData):
             response.status_code,
             response.text
         )
-        response.raise_for_status()
+        #response.raise_for_status()
         return response.text
     except Exception as e:
         print(

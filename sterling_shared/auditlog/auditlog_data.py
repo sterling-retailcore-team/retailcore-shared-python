@@ -168,7 +168,7 @@ class AuditLogData:
         }
     
     def __repr__(self):
-        return self.to_dict()
+        return self.__str__()
     
     def __str__(self):
         return json.dumps(self.to_dict())
