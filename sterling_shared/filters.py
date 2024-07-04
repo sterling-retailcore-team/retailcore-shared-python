@@ -32,6 +32,6 @@ class StatsFilter(DateFilter):
 
     def filter_approval_by(self, queryset, name, value):
         if value == "ME":
-            queryset = queryset | queryset.filter(approved_by=self.request.user.id)
+            queryset = queryset.filter(approved_by=self.request.user.id)
         return queryset
 
