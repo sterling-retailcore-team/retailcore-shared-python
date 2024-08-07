@@ -16,13 +16,13 @@ class UserData(object):
 
 
 def get_auth_user(token):
-    auth_service_url = os.getenv('AUTH_SERVICE_URL', 'http://localhost:10060')
+    auth_service_url = os.getenv('AUTH_SERVICE_API_URL', 'http://localhost:10060')
     auth_decode_url = f'{auth_service_url}/api/v1/auth/decode/'
     headers = {'Accept': 'application/json', 'Authorization': f'Bearer {str(token)}',
                'Content-Type': 'application/json', 'ServiceKey': settings.SERVICE_ID}
     data = {'token': str(token)}
     try:
-        res = requests.request(method="POST", url=auth_decode_url, json=data, headers=headers)
+        res = requests.request(method="POST", url=auth_decode_url, json=data, headers=headers, verify=False, timeout=5)
 
     except requests.ConnectionError as err:
         raise serializers.ValidationError(f"Cannot establish connection: {err}") from err
