@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sterling-utils",
-    version="0.2.0",
+    version="0.2.1",
     author="Folayemi Bello",
-    author_email="fola@bepeerless.co",
+    author_email="fola.bello@bepeerless.co",
     packages=setuptools.find_packages(),
     include_package_data=True,
     description="A utility package for sterling core",
