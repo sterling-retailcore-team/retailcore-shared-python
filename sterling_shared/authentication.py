@@ -22,7 +22,7 @@ def get_auth_user(token):
                'Content-Type': 'application/json', 'ServiceKey': settings.SERVICE_ID}
     data = {'token': str(token)}
     try:
-        res = requests.request(method="POST", url=auth_decode_url, json=data, headers=headers, timeout=5)
+        res = requests.request(method="POST", url=auth_decode_url, json=data, headers=headers, verify=False, timeout=5)
 
     except requests.ConnectionError as err:
         raise serializers.ValidationError(f"Cannot establish connection: {err}") from err
