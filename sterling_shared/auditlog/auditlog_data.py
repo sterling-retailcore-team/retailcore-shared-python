@@ -82,8 +82,6 @@ class AuditLogData:
         cols = []
         if isinstance(self.newValuesJson, dict):
             for k in self.newValuesJson:
-                print("oldValuesJson", self.oldValuesJson.get(k))
-                print("newValuesJson", self.newValuesJson.get(k))
                 if self.oldValuesJson.get(k) != self.newValuesJson[k]:
                     cols.append(k)
         if 'password' in self.newValuesJson:
@@ -104,9 +102,9 @@ class AuditLogData:
             "microserviceName": self.microserviceName,
             "payloadCreatedDate": self.payloadCreatedDate,
             "endpointName": self.endpointName,
-            "oldValuesJson": jsonize(self.oldValuesJson),
-            "newValuesJson": jsonize(self.newValuesJson),
-            "affectedColumns": jsonize(self.guess_affected_cols()),
+            "oldValuesJson": json.loads(jsonize(self.oldValuesJson))),
+            "newValuesJson": json.loads(jsonize(self.newValuesJson)),
+            "affectedColumns": json.loads(jsonize(self.guess_affected_cols())),
             "role": self.role,
             "userName": self.userName,
             "fullName": self.fullName,
