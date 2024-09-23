@@ -102,7 +102,7 @@ class AuditLogData:
             "microserviceName": self.microserviceName,
             "payloadCreatedDate": self.payloadCreatedDate,
             "endpointName": self.endpointName,
-            "oldValuesJson": json.loads(jsonize(self.oldValuesJson))),
+            "oldValuesJson": json.loads(jsonize(self.oldValuesJson)),
             "newValuesJson": json.loads(jsonize(self.newValuesJson)),
             "affectedColumns": json.loads(jsonize(self.guess_affected_cols())),
             "role": self.role,
