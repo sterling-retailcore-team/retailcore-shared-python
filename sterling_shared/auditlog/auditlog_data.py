@@ -119,7 +119,7 @@ class AuditLogData:
             "clientInfo": self.clientInfo,
             "actionStatus": self.actionStatus,
             "lastLogin": self.lastLogin,
-            "sessionID": self.sessionID,
+            "sessionID": str(self.sessionID),
             "module": self.module,
             "moduleID": self.moduleID,
             "timestamp": self.timestamp,
