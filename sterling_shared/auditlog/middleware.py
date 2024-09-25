@@ -159,7 +159,7 @@ class AuditLogMiddleware(MiddlewareMixin):
                     request.audit_data.userName = str(user.username or user.email)
                     request.audit_data.fullName = f"{user.firstname} {user.lastname}"
                     token_key = request.headers.get("Authorization").split(" ")[-1]
-                    request.audit_data.sessionID = user.session_id or token_key
+                    request.audit_data.sessionID = str(user.session_id) or token_key
                     decoded_token = jwt.decode(
                         token_key, options={"verify_signature": False}
                     )
