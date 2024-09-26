@@ -169,7 +169,7 @@ class AuditLogData:
         return self.__str__()
     
     def __str__(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
     
     def __unicode__(self):
         return self.__str__()
