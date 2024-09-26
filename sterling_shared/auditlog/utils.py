@@ -154,7 +154,7 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
 
 def push_audit_log(data: AuditLogData):
     token = os.getenv("AUDITLOG_AUTH_TOKEN", data.sessionID)
-    timeout = int(os.getenv("AUDITLOG_TIMEOUT", "5"))
+    timeout = int(os.getenv("AUDITLOG_TIMEOUT", "120"))
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
