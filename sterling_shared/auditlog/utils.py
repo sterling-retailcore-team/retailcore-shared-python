@@ -30,14 +30,8 @@ class CustomJsonEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-# def jsonize(data):
-#     return json.dumps(data, cls=CustomJsonEncoder)
 def jsonize(data):
-    
-    if isinstance(data, dict):
-        return json.dumps(data, cls=CustomJsonEncoder)
-    elif isinstance(data, str):
-        return data 
+    return str(json.dumps(data, cls=CustomJsonEncoder))
 
 
 def extract_browser_name(user_agent):
