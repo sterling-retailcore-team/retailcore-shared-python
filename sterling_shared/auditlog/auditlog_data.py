@@ -104,7 +104,7 @@ class AuditLogData:
             "endpointName": self.endpointName,
             "oldValuesJson": jsonize(self.oldValuesJson),
             "newValuesJson": jsonize(self.newValuesJson),
-            "affectedColumns":f'"{", ".join(self.guess_affected_cols())}"',
+            "affectedColumns":f'"{", ".join(self.guess_affected_cols())}"' if self.guess_affected_cols() else '',
             "role": self.role,
             "userName": self.userName,
             "fullName": self.fullName,

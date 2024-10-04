@@ -37,8 +37,6 @@ def jsonize(data):
 
     if isinstance(data, dict):
         return json.dumps(data, cls=CustomJsonEncoder)
-    elif isinstance(data, str):
-        return data
     else:
         return str(json.dumps(data, cls=CustomJsonEncoder)) 
 
