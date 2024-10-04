@@ -31,7 +31,15 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 
 def jsonize(data):
-    return json.dumps(data, cls=CustomJsonEncoder)
+    return str(json.dumps(data, cls=CustomJsonEncoder)) 
+
+# def jsonize(data):
+
+#     if isinstance(data, dict):
+#         return json.dumps(data, cls=CustomJsonEncoder)
+#     else:
+#         return str(json.dumps(data, cls=CustomJsonEncoder)) 
+
 
 
 def extract_browser_name(user_agent):
