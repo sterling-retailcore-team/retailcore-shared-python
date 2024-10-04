@@ -39,6 +39,9 @@ def jsonize(data):
         return json.dumps(data, cls=CustomJsonEncoder)
     elif isinstance(data, str):
         return data
+    else:
+        return str(json.dumps(data, cls=CustomJsonEncoder)) 
+
 
 
 def extract_browser_name(user_agent):
