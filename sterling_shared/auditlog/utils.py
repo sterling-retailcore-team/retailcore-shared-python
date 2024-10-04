@@ -30,15 +30,15 @@ class CustomJsonEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-# def jsonize(data):
-#     return str(json.dumps(data, cls=CustomJsonEncoder)) 
-
 def jsonize(data):
+    return str(json.dumps(data, cls=CustomJsonEncoder)) 
 
-    if isinstance(data, dict):
-        return json.dumps(data, cls=CustomJsonEncoder)
-    else:
-        return str(json.dumps(data, cls=CustomJsonEncoder)) 
+# def jsonize(data):
+
+#     if isinstance(data, dict):
+#         return json.dumps(data, cls=CustomJsonEncoder)
+#     else:
+#         return str(json.dumps(data, cls=CustomJsonEncoder)) 
 
 
 
