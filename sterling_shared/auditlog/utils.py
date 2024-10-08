@@ -171,7 +171,8 @@ def push_audit_log(data: AuditLogData):
         print(
             "sterling_shared.push_audit_log",
             response.status_code,
-            response.text
+            response.text,
+            response.url
         )
         #response.raise_for_status()
         return response.text
