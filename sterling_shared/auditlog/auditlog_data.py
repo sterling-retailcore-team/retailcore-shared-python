@@ -170,7 +170,7 @@ class AuditLogData:
         return self.__str__()
     
     def __str__(self):
-        cc
+        return json.loads(json.dumps(self.to_dict()))
     
     def __unicode__(self):
         return self.__str__()
