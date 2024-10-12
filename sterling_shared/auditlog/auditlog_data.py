@@ -93,7 +93,8 @@ class AuditLogData:
     def to_dict(self):
         from .utils import jsonize
 
-        return {
+        # return
+        data = {
             "auditID": self.auditID,
             "action": self.action,
             "sourceIP": self.sourceIP,
@@ -164,6 +165,7 @@ class AuditLogData:
             "eocRunInformation": self.eocRunInformation,
             "eocRunLog": self.eocRunLog
         }
+        return json.loads(data)
     
     def __repr__(self):
         return self.__str__()
