@@ -175,6 +175,7 @@ class AuditLogData:
         print("we are sending:", res, "________________________")
         print("OLD:", res.get("oldValuesJson", "No old values"), "+++++++++++++++")
         print("NEW:", res.get("newValuesJson", "No new values"), "+++++++++++++++")
+        return res
     
     def __unicode__(self):
         return self.__str__()
