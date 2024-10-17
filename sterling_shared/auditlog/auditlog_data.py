@@ -93,7 +93,8 @@ class AuditLogData:
     def to_dict(self):
         from .utils import jsonize
 
-        return {
+        # return 
+        res = {
             "auditID": self.auditID,
             "action": self.action,
             "sourceIP": self.sourceIP,
@@ -164,6 +165,21 @@ class AuditLogData:
             "eocRunInformation": self.eocRunInformation,
             "eocRunLog": self.eocRunLog
         }
+        
+        json_res = json.dumps(res)
+        print("Serialized JSON:", json_res)
+        print("OLD Values after serialization:", res["oldValuesJson"])
+        print("NEW Values after serialization:", res["newValuesJson"])
+        res_data = json.loads(json_res)
+        old_value = res_data["oldValuesJson"]
+        new_value = res_data["newValuesJson"]
+        clean_old_value = json.loads(old_value)
+        clean_new_value = json.loads(new_value)
+        res_data["oldValuesJson"] = clean_old_value
+        res_data["newValuesJson"] = clean_new_value
+
+        print("we are sending:", res_data, "________________________")
+        return res_data
     
     def __repr__(self):
         return self.__str__()

@@ -31,7 +31,9 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 
 def jsonize(data):
-    return json.dumps(data, cls=CustomJsonEncoder)
+    return str(json.dumps(data, cls=CustomJsonEncoder))
+
+
 
 
 def extract_browser_name(user_agent):
@@ -159,8 +161,9 @@ def push_audit_log(data: AuditLogData):
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
     }
+
     try:
-        print("sterling_shared.push_audit_log", data.to_dict())
+        # print("sterling_shared.push_audit_log", data.to_dict())
         response = requests.post(
             url=logger_url,
             headers=headers,
