@@ -161,6 +161,7 @@ def push_audit_log(data: AuditLogData):
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
     }
+
     try:
         # print("sterling_shared.push_audit_log", data.to_dict())
         response = requests.post(
