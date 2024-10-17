@@ -170,9 +170,16 @@ class AuditLogData:
         print("Serialized JSON:", json_res)
         print("OLD Values after serialization:", res["oldValuesJson"])
         print("NEW Values after serialization:", res["newValuesJson"])
-        res = json.loads(json_res)
-        print("we are sending:", res, "________________________")
-        return res
+        resss = json.loads(json_res)
+        old_value = resss["oldValuesJson"]
+        new_value = resss["newValuesJson"]
+        clean_old_value = json.loads(old_value)
+        clean_new_value = json.loads(new_value)
+        resss["oldValuesJson"] = clean_old_value
+        resss["newValuesJson"] = clean_new_value
+
+        print("we are sending:", resss, "________________________")
+        return resss
     
     def __repr__(self):
         return self.__str__()
