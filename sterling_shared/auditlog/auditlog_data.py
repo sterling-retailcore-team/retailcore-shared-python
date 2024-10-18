@@ -177,9 +177,9 @@ class AuditLogData:
         clean_old_value = json.loads(old_value)
         clean_new_value = json.loads(new_value)
         clean_colums = json.loads(affected_columns)
-        res_data["oldValuesJson"] = clean_old_value
-        res_data["newValuesJson"] = clean_new_value
-        res_data["affectedColumns"] = clean_colums
+        res_data["oldValuesJson"] = str(clean_old_value)
+        res_data["newValuesJson"] = str(clean_new_value)
+        res_data["affectedColumns"] = str(clean_colums)
 
         print("we are sending:", res_data, "________________________")
         return res_data
