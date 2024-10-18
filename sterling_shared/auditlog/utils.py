@@ -163,7 +163,7 @@ def push_audit_log(data: AuditLogData):
     }
 
     try:
-        # print("sterling_shared.push_audit_log", data.to_dict())
+        print("sterling_shared.push_audit_log", data.to_dict())
         response = requests.post(
             url=logger_url,
             headers=headers,

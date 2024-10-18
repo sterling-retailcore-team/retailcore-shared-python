@@ -168,15 +168,16 @@ class AuditLogData:
         
         json_res = json.dumps(res)
         print("Serialized JSON:", json_res)
-        print("OLD Values after serialization:", res["oldValuesJson"])
-        print("NEW Values after serialization:", res["newValuesJson"])
         res_data = json.loads(json_res)
         old_value = res_data["oldValuesJson"]
         new_value = res_data["newValuesJson"]
+        affected_columns = res_data["affectedColumns"]
         clean_old_value = json.loads(old_value)
         clean_new_value = json.loads(new_value)
-        res_data["oldValuesJson"] = clean_old_value
-        res_data["newValuesJson"] = clean_new_value
+        clean_colums = json.loads(affected_columns)
+        res_data["oldValuesJson"] = str(clean_old_value)
+        res_data["newValuesJson"] = str(clean_new_value)
+        res_data["affectedColumns"] = str(clean_colums)
 
         print("we are sending:", res_data, "________________________")
         return res_data
