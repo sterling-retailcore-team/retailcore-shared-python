@@ -168,8 +168,6 @@ class AuditLogData:
         
         json_res = json.dumps(res)
         print("Serialized JSON:", json_res)
-        print("OLD Values after serialization:", res["oldValuesJson"])
-        print("NEW Values after serialization:", res["newValuesJson"])
         res_data = json.loads(json_res)
         old_value = res_data["oldValuesJson"]
         new_value = res_data["newValuesJson"]
