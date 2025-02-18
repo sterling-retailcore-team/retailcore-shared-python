@@ -15,6 +15,8 @@ class CustomJsonEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.datetime):
             return str(o)
+        if isinstance(o, datetime.date):
+            return str(o)
         if isinstance(o, decimal.Decimal):
             return str(o)
         if isinstance(o, UUID):
@@ -30,6 +32,8 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 def jsonize(data):
     return str(json.dumps(data, cls=CustomJsonEncoder))
+
+
 
 
 def extract_browser_name(user_agent):
@@ -152,10 +156,12 @@ def create_log(endpoint_name, token_key, meta, user_request, action_type, action
 
 def push_audit_log(data: AuditLogData):
     token = os.getenv("AUDITLOG_AUTH_TOKEN", data.sessionID)
+    timeout = int(os.getenv("AUDITLOG_TIMEOUT", "5"))
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
     }
+
     try:
         print("sterling_shared.push_audit_log", data.to_dict())
         response = requests.post(
@@ -163,16 +169,18 @@ def push_audit_log(data: AuditLogData):
             headers=headers,
             json=data.to_dict(),
             verify=False,
-            timeout=30
+            timeout=timeout
         )
         print(
             "sterling_shared.push_audit_log",
             response.status_code,
             response.text
         )
-        response.raise_for_status()
+        #response.raise_for_status()
+        return response.text
     except Exception as e:
         print(
             "sterling_shared.push_audit_log",
             f"An error occurred while making API call: {e}"
         )
+        return f"An error occurred while making API call: {e}"

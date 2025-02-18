@@ -8,7 +8,7 @@ class AuthService(BaseRequest):
 
     def __init__(self, request):
         super().__init__(request)
-        base_url = f"{os.getenv('AUTH_SERVICE_URL', 'http://localhost:10050')}/api/v1"
+        base_url = f"{os.getenv('AUTH_SERVICE_API_URL', 'http://localhost:10050')}/api/v1"
         self.base_url = f"{base_url}"
 
     def get_user_by_id(self, id):
