@@ -1,14 +1,9 @@
 import redis
 import os
 
-SESSION_REDIS_HOST = os.getenv('SESSION_REDIS_HOST', 'localhost')
-SESSION_REDIS_PORT = os.getenv('SESSION_REDIS_PORT', 6379)
-SESSION_REDIS_DB = os.getenv('SESSION_REDIS_DB', 0)
+AUTH_SESSION_REDIS_URL = os.getenv('AUTH_SESSION_REDIS_URL', 'redis://localhost:6379/0')
 
-SESSION_REDIS_POOL = redis.ConnectionPool(
-    host=SESSION_REDIS_HOST, port=SESSION_REDIS_PORT, 
-    db=SESSION_REDIS_DB, decode_responses=True
-)
+SESSION_REDIS_POOL = redis.ConnectionPool.from_url(AUTH_SESSION_REDIS_URL)
 
 def _get_session_redis_client():
     return redis.Redis(connection_pool=SESSION_REDIS_POOL)
