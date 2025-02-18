@@ -1,7 +1,7 @@
 import redis
 import os
 
-AUTH_SESSION_REDIS_URL = os.getenv('AUTH_SESSION_REDIS_URL', 'redis://localhost:6379')
+AUTH_SESSION_REDIS_URL = os.getenv('AUTH_SESSION_REDIS_URL', 'redis://localhost:6379/0')
 
 SESSION_REDIS_POOL = redis.ConnectionPool.from_url(AUTH_SESSION_REDIS_URL)
 
