@@ -3,7 +3,7 @@ from datetime import datetime, time
 import django_filters
 from django.db.models import QuerySet
 
-from sterling_shared.enums import INITIATED_BY_FILTER_CHOICES_ENUMS, APPROVED_BY_FILTER_CHOICES_ENUMS
+from shared_utils.enums import INITIATED_BY_FILTER_CHOICES_ENUMS, APPROVED_BY_FILTER_CHOICES_ENUMS
 
 
 class DateFilter(django_filters.FilterSet):
