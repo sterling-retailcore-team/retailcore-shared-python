@@ -1,6 +1,6 @@
 import os
 
-from sterling_shared.services.base import BaseRequest
+from shared_utils.services.base import BaseRequest
 
 
 class AuthService(BaseRequest):
