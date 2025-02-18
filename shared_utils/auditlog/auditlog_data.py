@@ -1,5 +1,6 @@
 import datetime
 import uuid
+import json
 
 
 class AuditLogData:
@@ -81,8 +82,6 @@ class AuditLogData:
         cols = []
         if isinstance(self.newValuesJson, dict):
             for k in self.newValuesJson:
-                print("oldValuesJson", self.oldValuesJson.get(k))
-                print("newValuesJson", self.newValuesJson.get(k))
                 if self.oldValuesJson.get(k) != self.newValuesJson[k]:
                     cols.append(k)
         if 'password' in self.newValuesJson:
@@ -94,7 +93,8 @@ class AuditLogData:
     def to_dict(self):
         from .utils import jsonize
 
-        return {
+        # return 
+        res = {
             "auditID": self.auditID,
             "action": self.action,
             "sourceIP": self.sourceIP,
@@ -120,7 +120,7 @@ class AuditLogData:
             "clientInfo": self.clientInfo,
             "actionStatus": self.actionStatus,
             "lastLogin": self.lastLogin,
-            "sessionID": self.sessionID,
+            "sessionID": str(self.sessionID),
             "module": self.module,
             "moduleID": self.moduleID,
             "timestamp": self.timestamp,
@@ -165,3 +165,29 @@ class AuditLogData:
             "eocRunInformation": self.eocRunInformation,
             "eocRunLog": self.eocRunLog
         }
+        
+        json_res = json.dumps(res)
+        print("Serialized JSON:", json_res)
+        res_data = json.loads(json_res)
+        old_value = res_data["oldValuesJson"]
+        new_value = res_data["newValuesJson"]
+        affected_columns = res_data["affectedColumns"]
+        clean_old_value = json.loads(old_value)
+        clean_new_value = json.loads(new_value)
+        clean_colums = json.loads(affected_columns)
+        res_data["oldValuesJson"] = str(clean_old_value)
+        res_data["newValuesJson"] = str(clean_new_value)
+        res_data["affectedColumns"] = str(clean_colums)
+
+        print("we are sending:", res_data, "________________________")
+        return res_data
+    
+    def __repr__(self):
+        return self.__str__()
+    
+    def __str__(self):
+        return json.dumps(self.to_dict())
+    
+    def __unicode__(self):
+        return self.__str__()
+    
