@@ -8,4 +8,4 @@ SESSION_REDIS_POOL = redis.ConnectionPool.from_url(AUTH_SESSION_REDIS_URL)
 def _get_session_redis_client():
     return redis.Redis(connection_pool=SESSION_REDIS_POOL)
 
-get_session_redis_client = _get_session_redis_client
+GET_SESSION_REDIS_CLIENT = _get_session_redis_client
