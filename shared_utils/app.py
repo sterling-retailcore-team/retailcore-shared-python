@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SterlingSharedConfig(AppConfig):
+class SharedUtilsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'sterling_shared'
+    name = 'shared_utils'
