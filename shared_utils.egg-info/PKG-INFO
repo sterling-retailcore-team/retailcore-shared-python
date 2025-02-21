@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: shared-utils
+Version: 0.2.1
+Summary: A utility package for shared utils
+Home-page: https://github.com/sterling-retailcore-team/retailcore-shared-python.git
+Author: Folayemi Bello
+Author-email: fola.bello@bepeerless.co
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# Shared Python Utilities
+
+This package contains shared utilities for the RetailCore project.
+
+## Installation
+
