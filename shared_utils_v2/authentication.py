@@ -18,7 +18,8 @@ def get_auth_user(token):
     redis_client = settings.GET_SESSION_REDIS_CLIENT()
 
     redis_key = f"SESSION_ID_{token}"
-    
+    print("Redis key", redis_key)
+    print("Redis client", redis_client)
     try:
         user_data = redis_client.get(redis_key) 
         if user_data is None:
