@@ -12,6 +12,8 @@ class UserData(object):
 
     def __init__(self, my_dict):
         for key in my_dict:
+            if key == "tenant":
+                setattr(self, "tenant_id", my_dict[key])
             setattr(self, key, my_dict[key])
 
 def get_auth_user(token):
