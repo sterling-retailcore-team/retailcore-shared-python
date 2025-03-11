@@ -14,7 +14,7 @@ class UserData(object):
         my_dict['tenant_id'] = my_dict.get('tenant', None)
         my_dict['firstname'] = my_dict.get('first_name', None)
         my_dict['lastname'] = my_dict.get('last_name', None)
-        my_dict['is_active'] = my_dict.get('is_active', None)
+        my_dict['is_active'] = True
 
         for key in my_dict:
             setattr(self, key, my_dict[key])
@@ -30,13 +30,16 @@ def get_auth_user(token):
             raise AuthenticationFailed("User session not found")
         # Decode the JSON data from Redis
         user_info = json.loads(user_data)
-        return UserData(user_info)       
-    except redis.RedisError as err:
-        print("Auth Session Redis connection error", err)
-        raise serializers.ValidationError(f"Redis connection error: {err}") from err
+        return UserData(user_info)
     except json.JSONDecodeError as err:
         print("Auth Session Invalid user data format", err)
         raise serializers.ValidationError(f"Invalid user data format: {err}") from err
+
+    except redis.RedisError as err:
+        print("Auth Session Redis connection error", err)
+        raise AuthenticationFailed(f"Redis connection error: {err}") from err
+    except AuthenticationFailed:
+        raise
     except Exception as err:
         import traceback
         traceback.print_exc()
