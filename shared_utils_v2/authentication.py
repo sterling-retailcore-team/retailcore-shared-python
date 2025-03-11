@@ -14,6 +14,7 @@ class UserData(object):
         my_dict['tenant_id'] = my_dict.get('tenant', None)
         my_dict['firstname'] = my_dict.get('first_name', None)
         my_dict['lastname'] = my_dict.get('last_name', None)
+        my_dict['is_active'] = my_dict.get('is_active', None)
 
         for key in my_dict:
             setattr(self, key, my_dict[key])
