@@ -19,31 +19,28 @@ class UserData(object):
         for key in my_dict:
             setattr(self, key, my_dict[key])
 
+
 def get_auth_user(token):
     redis_client = settings.GET_SESSION_REDIS_CLIENT()
-
     redis_key = f"SESSION_ID_{token}"
-    
+
     try:
-        user_data = redis_client.get(redis_key) 
+        user_data = redis_client.get(redis_key)
         if user_data is None:
             raise AuthenticationFailed("User session not found")
+
         # Decode the JSON data from Redis
         user_info = json.loads(user_data)
         return UserData(user_info)
-    except json.JSONDecodeError as err:
-        print("Auth Session Invalid user data format", err)
-        raise serializers.ValidationError(f"Invalid user data format: {err}") from err
 
-    except redis.RedisError as err:
-        print("Auth Session Redis connection error", err)
-        raise AuthenticationFailed(f"Redis connection error: {err}") from err
     except AuthenticationFailed:
+        # Re-raise existing AuthenticationFailed exceptions unchanged
         raise
     except Exception as err:
         import traceback
         traceback.print_exc()
-        raise serializers.ValidationError(f"Error occurred: {err}") from err
+        # Wrap all other exceptions in an AuthenticationFailed with details about the error
+        raise AuthenticationFailed(f"Authentication failed: {err}") from err
 
 
 class CustomJWTAuthentication(JWTAuthentication):
@@ -57,7 +54,6 @@ class CustomJWTAuthentication(JWTAuthentication):
 
 class CustomJWTAuthenticationScheme(SimpleJWTScheme):
     target_class = CustomJWTAuthentication
-
 
 # what to use to get value from redis...
 # SESSION_ID_{jwt_token} --- this is a key u use to get the info from redis
