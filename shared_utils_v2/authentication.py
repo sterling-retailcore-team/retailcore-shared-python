@@ -17,6 +17,8 @@ class UserData(object):
         my_dict['is_active'] = True
 
         for key in my_dict:
+            if key == "tenant":
+                setattr(self, "tenant_id", my_dict[key])
             setattr(self, key, my_dict[key])
 
 
