@@ -9,3 +9,6 @@ def _get_session_redis_client():
     return redis.Redis(connection_pool=SESSION_REDIS_POOL)
 
 GET_SESSION_REDIS_CLIENT = _get_session_redis_client
+
+APPEND_SLASH = False
+
