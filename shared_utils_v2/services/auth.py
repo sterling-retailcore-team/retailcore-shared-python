@@ -13,12 +13,12 @@ class AuthService(BaseRequest):
                                    'service')
 
     def get_user_by_id(self, id):
-        path = f'user/{self.base_path}/{id}/'
+        path = f'user/{self.base_path}/{id}'
         return self.send_request("GET", path)
 
     def get_users_by_ids(self, ids: list, to_dict: bool = False):
         string_ids = ",".join(ids)
-        path = f'user/{self.base_path}/fetch/by-id/?id={string_ids}'
+        path = f'user/{self.base_path}/fetch/by-id?id={string_ids}'
         users = self.send_request("GET", path)
         if to_dict:
             return {x["id"]: x for x in users['data']}
@@ -26,7 +26,7 @@ class AuthService(BaseRequest):
 
     def get_users_by_permissions(self, permissions: list, to_dict: bool = False):
         string_permissions = ",".join(permissions)
-        path = f'user/{self.base_path}/fetch/by-permission/?permissions={string_permissions}'
+        path = f'user/{self.base_path}/fetch/by-permission?permissions={string_permissions}'
         users = self.send_request("GET", path)
         if to_dict:
             return {x["id"]: x for x in users['data']}
