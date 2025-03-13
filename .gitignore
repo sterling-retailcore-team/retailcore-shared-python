@@ -4,10 +4,12 @@ venv/
 __pycache__/
 .idea/
 logs/*
-.vscode/
 setup.cfg
 .DS_Store
 .pytest_cache
 /env
 build/
 dist/
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
