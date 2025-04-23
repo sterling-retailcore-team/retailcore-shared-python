@@ -32,3 +32,4 @@ class AuthService(BaseRequest):
         if to_dict:
             return {x["id"]: x for x in users['data']}
         return users['data']
+
