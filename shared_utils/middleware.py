@@ -1,6 +1,6 @@
 import json
 from django.http import JsonResponse, HttpResponse
-
+from django.utils.deprecation import MiddlewareMixin
 from sentry_sdk import capture_exception
 
 
@@ -49,3 +49,26 @@ class ValidationErrorMiddleware:
             response.content = json.dumps(data)
 
         return response
+
+
+class CookieToAuthHeaderMiddleware(MiddlewareMixin):
+    """Bridge cookie-based auth to the header readers.
+
+    When the request carries the access token in a cookie but no Authorization
+    header, inject it into ``request.META`` as a Bearer header. This lets every
+    existing header reader (DRF ``CustomJWTAuthentication``, the access-time /
+    session / audit middleware, the ``@decorators`` token check, and the
+    service-to-service token forwards) keep working unchanged.
+
+    Must be the FIRST middleware and must only touch ``request.META`` /
+    ``request.COOKIES``: ``request.headers`` is a cached_property built from
+    ``META`` on first access, so populating META here (before anything reads
+    ``headers``) makes the injected token visible to header readers too.
+    """
+
+    def process_request(self, request):
+        if request.META.get("HTTP_AUTHORIZATION"):
+            return
+        token = request.COOKIES.get("access_token")
+        if token:
+            request.META["HTTP_AUTHORIZATION"] = f"Bearer {token}"
