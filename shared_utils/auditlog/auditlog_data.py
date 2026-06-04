@@ -1,12 +1,13 @@
 import datetime
-import uuid
 import json
+import uuid
 
 
 class AuditLogData:
     def __init__(self):
         now = str(datetime.datetime.now())
         self.auditID = str(uuid.uuid4())
+        self.tenantID = ""
         self.action = ""
         self.sourceIP = ""
         self.roleId = ""
@@ -84,17 +85,22 @@ class AuditLogData:
             for k in self.newValuesJson:
                 if self.oldValuesJson.get(k) != self.newValuesJson[k]:
                     cols.append(k)
-        if 'password' in self.newValuesJson:
-            self.newValuesJson['password'] = "***"
-        if 'password' in self.oldValuesJson:
-            self.oldValuesJson['password'] = "***"
+        if "password" in self.newValuesJson:
+            self.newValuesJson["password"] = "***"
+        if "mfa_secret" in self.oldValuesJson:
+            self.oldValuesJson["mfa_secret"] = "***"
+        if "mfa_secret" in self.newValuesJson:
+            self.newValuesJson["mfa_secret"] = "***"
+        if "password" in self.newValuesJson:
+            self.newValuesJson["password"] = "***"
         return cols
 
     def to_dict(self):
         from .utils import jsonize
 
-        # return 
+        # return
         res = {
+            "tenantID": self.tenantID,
             "auditID": self.auditID,
             "action": self.action,
             "sourceIP": self.sourceIP,
@@ -163,11 +169,10 @@ class AuditLogData:
             "loanProduct": self.loanProduct,
             "loanAmount": self.loanAmount,
             "eocRunInformation": self.eocRunInformation,
-            "eocRunLog": self.eocRunLog
+            "eocRunLog": self.eocRunLog,
         }
-        
+
         json_res = json.dumps(res)
-        print("Serialized JSON:", json_res)
         res_data = json.loads(json_res)
         old_value = res_data["oldValuesJson"]
         new_value = res_data["newValuesJson"]
@@ -179,15 +184,13 @@ class AuditLogData:
         res_data["newValuesJson"] = str(clean_new_value)
         res_data["affectedColumns"] = str(clean_colums)
 
-        print("we are sending:", res_data, "________________________")
         return res_data
-    
+
     def __repr__(self):
         return self.__str__()
-    
+
     def __str__(self):
         return json.dumps(self.to_dict())
-    
+
     def __unicode__(self):
         return self.__str__()
-    
