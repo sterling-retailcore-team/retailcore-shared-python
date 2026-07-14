@@ -4,8 +4,44 @@
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
     <title>New Profile Created</title>
     <style>
+      :root {
+        color-scheme: light dark;
+      }
+
+      .logo-light {
+        display: block !important;
+      }
+
+      .logo-dark {
+        display: none !important;
+        max-height: 0;
+        overflow: hidden;
+        mso-hide: all;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .logo-light {
+          display: none !important;
+          max-height: 0;
+          overflow: hidden;
+          mso-hide: all;
+        }
+
+        .logo-dark {
+          display: block !important;
+          max-height: none !important;
+          overflow: visible !important;
+        }
+
+        .email-header {
+          background-color: #1a1a1a !important;
+        }
+      }
+
       @media only screen and (max-width: 620px) {
         table[class='body'] h1 {
           font-size: 28px !important;
@@ -121,7 +157,7 @@
           width="580"
           valign="top"
         >
-          <div class="header" style="padding: 20px; background: #fff; max-width: 580px">
+          <div class="header email-header" style="padding: 20px; background: #fff; max-width: 580px">
             <table
               role="presentation"
               border="0"
@@ -132,14 +168,27 @@
             >
               <tr>
                 <td align="right" width="100%" style="font-family: sans-serif; font-size: 14px; vertical-align: top" valign="top">
-                  <a target="_blank" href="" style="color: #ec0867; text-decoration: underline"
-                    ><img src="#" height="40" alt="Seabaas" style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%"
-                  /></a>
+                  <a target="_blank" href="" style="color: #ec0867; text-decoration: underline">
+                    <img
+                      class="logo-light"
+                      src="https://s3.eu-central-1.amazonaws.com/seabaas.co/SL+Black.png"
+                      height="40"
+                      alt="SeaBaas Lite"
+                      style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%"
+                    />
+                    <img
+                      class="logo-dark"
+                      src="https://s3.eu-central-1.amazonaws.com/seabaas.co/SL+White.png"
+                      height="40"
+                      alt="SeaBaas Lite"
+                      style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%"
+                    />
+                  </a>
                 </td>
               </tr>
             </table>
           </div>
-          <div class="header" style="padding: 20px; background: #fff; max-width: 580px">
+          <div class="header email-header" style="padding: 20px; background: #fff; max-width: 580px">
             <table
               role="presentation"
               border="0"
@@ -151,10 +200,17 @@
               <tr>
                 <td align="center" width="100%" style="font-family: sans-serif; font-size: 14px; vertical-align: top" valign="top">
                   <img
-                  
-                    src="#" 
+                    class="logo-light"
+                    src="https://s3.eu-central-1.amazonaws.com/seabaas.co/SL+Black.png"
                     height="300"
-                    alt="Seabaas"
+                    alt="SeaBaas Lite"
+                    style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%"
+                  />
+                  <img
+                    class="logo-dark"
+                    src="https://s3.eu-central-1.amazonaws.com/seabaas.co/SL+White.png"
+                    height="300"
+                    alt="SeaBaas Lite"
                     style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%"
                   />
                 </td>
