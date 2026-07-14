@@ -1,0 +1,13 @@
+
+venv/
+.history/
+__pycache__/
+.idea/
+logs/*
+setup.cfg
+.DS_Store
+.pytest_cache
+/env
+build/
+dist/
+.gitignore
